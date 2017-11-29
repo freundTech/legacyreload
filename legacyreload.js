@@ -35,14 +35,17 @@ browser.pageAction.onClicked.addListener(function (tab) {
 });
 
 browser.webNavigation.onCompleted.addListener(function (details) {
-    browser.pageAction.setIcon({path: reloadIcon, tabId: details.tabId});
-    delete loadingTabs[details.tabId];
+    loadingStopped(details.tabId);
 });
 browser.webNavigation.onErrorOccurred.addListener(function (details) {
-    browser.pageAction.setIcon({path: reloadIcon, tabId: details.tabId});
-    delete loadingTabs[details.tabId];
+    loadingStopped(details.tabId);
 });
 
 function showPageAction(tabId) {
     browser.pageAction.show(tabId);
+}
+
+function loadingStopped(tabId) {
+    browser.pageAction.setIcon({path: reloadIcon, tabId: tabId});
+    delete loadingTabs[tabId];
 }
